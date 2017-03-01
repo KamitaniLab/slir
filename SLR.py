@@ -98,37 +98,31 @@ class SparseLinearRegressor(BaseEstimator, ClassifierMixin):
         Parameters
         ----------
         X: array-like, shape = [n_samples, n_features] 
-        y: array-like, shape
-        ラベル <n labels * k types>
-            同じデータから推定したいラベルが複数ある場合，k種類のラベルを同時に渡すことが可能
+        y: array-like, shape = [n_samples]
 
         Returns
         -------
         self : returns an instance of self.
         """
         ####################
-        # 定数 
-        ####################
-        
-        ####################
         # Check values
         ####################        
-        # ラベルの種別が1種類で，1次元arrayになっている場合，2次元にreshapeしておく
+        # Reshape 1d array label to 2d 
         if y.ndim == 1:
             y = y.reshape((len(y), 1))
         
-        # 各サイズのチェック
+        # Check size
         sample_num = X.shape[0]
         dim_num = X.shape[1]
         label_type_num = y.shape[1]
-        if X.shape[0] != y.shape[0]:# エラーにしたい
+        if X.shape[0] != y.shape[0]: # Error
             print "The number of samples are unmatched."
             print "Train X shape:", X.shape
             print "Train y shape:", y.shape
             quit()
         dim_num_org = dim_num 
         
-        # transpose 
+        # Transpose 
         X = X.transpose() 
         Y = y.transpose() 
         del y 
@@ -290,26 +284,29 @@ class SparseLinearRegressor(BaseEstimator, ClassifierMixin):
         
         return self
         
-    def predict(self, data):
+    def predict(self, X):
         """
-        predict用メソッド
-        Wとtrain_label_averageを使って，テストのdataをpredictする
+        Predict using the linear model
         
-        @param data: データ <n samples * m dimensions> 
+        Parameters
+        ----------
+        X: array-like, shape = [n_samples, n_features] 
+
+        Returns
+        -------
+        C : array, shape = (n_samples,)
+            Returns predicted values.
         """
-        # dデータを転置し，
-        X = data.transpose() 
-        del data
-        # 有効次元以外を削減しておく
+        # Transpose and reduce X
+        X = X.transpose() 
         X = X[self.activate_index, :]
         
-        # 写像
-        # predict_output.mでは複雑な関数を呼び出しているが，時系列情報がない限り，ここは単純な内積で良い
-        predicted_Y = np.dot(self.W, X) 
-        predicted_Y = predicted_Y.transpose()
-        # ラベルの平均を足しておく
-        predicted_Y += self.train_label_average
+        # Predict by inner-producting and adding average of label
+        C = np.dot(self.W, X) 
+        C = C.transpose() + self.train_label_average
         
-        return predicted_Y
+        C = C.flatten()
+        
+        return C
     
         
