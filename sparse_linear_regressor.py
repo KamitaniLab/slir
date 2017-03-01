@@ -49,7 +49,7 @@ class sparseLinearRegressor(BaseEstimator, ClassifierMixin):
         estimated precision of the noise.
         ノイズの推定精度
     
-    lambda_ : float
+    lambda_ : float, shape = (n_features)
         estimated precision of the weights.
         回帰係数の推定精度
         
