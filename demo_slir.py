@@ -23,25 +23,26 @@ def main():
     diabetes_y_train = diabetes.target[:-20]
     diabetes_y_test = diabetes.target[-20:]
         
-    # スパース性を模擬する
+    # Generate a sparse data
     # 次元方向にコピーを繰り返して，サンプル数よりも大きくなるようにする
     diabetes_X_train = np.hstack([diabetes_X_train for _ in range(43)])
     diabetes_X_test = np.hstack([diabetes_X_test for _ in range(43)])
         
-    print "ARD_DNI"
+    print "Start regression"
     
     # Create linear regression object
     start_time = time.time()
-    regr = SparseLinearRegressor(n_iter=200, verbose=True)
+    clf = SparseLinearRegressor(n_iter=200, verbose=True)
 
-    # Train the model using the training sets
-    regr.fit(diabetes_X_train, diabetes_y_train)
+    # Fit
+    clf.fit(diabetes_X_train, diabetes_y_train)
     print("Processing Time: %.4f" % (time.time() - start_time))
     
-    # The correlation 
-    predicted_labels = regr.predict(diabetes_X_test).flatten() # 各種ラベルが縦に並んでいるよ <n samples * k types>
+    # Predict
+    predicted_labels = clf.predict(diabetes_X_test) 
+    
+    # Scores of correlation and mean squared error(MSE)
     print("Correalation: %.4f" % np.corrcoef(predicted_labels, diabetes_y_test)[0,1])
-    # The mean squared error
     print("MSE: %.4f" % np.mean((predicted_labels - diabetes_y_test) ** 2))
 
 
