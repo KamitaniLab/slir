@@ -1,9 +1,8 @@
-# SMLR: Sparse Multinominal Logistic Regression
+# Sparse Linear Regressor
 
-Sparse Multinomial Logistic Regression (SMLR) classifier, writen by Kei Majima at Kyoto Univ.
-The API of this function is compatible with the logistic regression in scikit-learn.
+The API of this function is compatible with the regressor in scikit-learn.
 
-Sparse regularization by automatic relevance determination (ARD) prior was introduced to the linear multinomial logistic regression algorithm (Yamashita et al., 2008).
+Sparse regularization by automatic relevance determination (ARD) prior was introduced to the linear regression algorithm (Yamashita et al., 2008).
 This regularization process estimates the importance of each voxel (feature) and prunes away voxels that are not useful for prediction.
 
 Original SLR toolbox for Matlab is available at <http://www.cns.atr.jp/%7Eoyamashi/SLR_WEB.html>.
@@ -11,15 +10,15 @@ Original SLR toolbox for Matlab is available at <http://www.cns.atr.jp/%7Eoyamas
 ## Usage
 
 ``` python
-from SMLR import *
+from SparseLinearRegressor import *
 
-smlr = SMLR.SMLR(n_iter=100)
+smlr = SparseLinearRegressor.sparse_linear_regressor(n_iter=100)
 smlr.fit(X,y)
 smlr.predict(X_test)
 ```
 
 - `X`, `X_text`: numpy array of input features (# of samples x # of features)
-- `y`: label vector consisting of integers (len (y) = # of samples; please use integers 0, 1, 2, ..., K-1 when K-class classification)
+- `y`: label vector consisting of float values 
 
 ### Parameters
 
@@ -30,10 +29,10 @@ smlr.predict(X_test)
 
 - `coef_`: array, shape = [n_classes, n_features]
     - Coefficient of the features in the decision function.
-- `intercept_`: array, shape = [n_classes]
-    - Intercept (a.k.a. bias) added to the decision function.
+- `lambda_`: array, shape = [n_classes]
+    - The estimated precision of the weights.
 
-For demonstration, try `demoSMLR_20140714.py` or `demoSMLR_20140714.ipnb`.
+For demonstration, try `demo_slir.py`.
 
 ## References
 
