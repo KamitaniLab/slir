@@ -5,7 +5,7 @@ import time
 import numpy as np
 from sklearn import datasets
 
-from sparse_linear_regressor import sparseLinearRegressor
+from SLR import SparseLinearRegressor
 
 
 def main():
@@ -32,7 +32,7 @@ def main():
     
     # Create linear regression object
     start_time = time.time()
-    regr = sparseLinearRegressor(n_iter=200, verbose=True)
+    regr = SparseLinearRegressor(n_iter=200, verbose=True)
 
     # Train the model using the training sets
     regr.fit(diabetes_X_train, diabetes_y_train)

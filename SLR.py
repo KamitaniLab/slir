@@ -7,7 +7,7 @@ SLiR (Sparse Linear Regressor)
 import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin
 
-class sparseLinearRegressor(BaseEstimator, ClassifierMixin):
+class SparseLinearRegressor(BaseEstimator, ClassifierMixin):
     """Sparse Linear Regressor (SLiR)
 
     Parameters
