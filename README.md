@@ -1,5 +1,6 @@
 # Sparse Linear Regressor
 
+Sparse linear regressor (SLR), writen by Misato Tanaka at ATR.
 The API of this function is compatible with the regressor in scikit-learn.
 
 Sparse regularization by automatic relevance determination (ARD) prior was introduced to the linear regression algorithm (Yamashita et al., 2008).
@@ -10,11 +11,11 @@ Original SLR toolbox for Matlab is available at <http://www.cns.atr.jp/%7Eoyamas
 ## Usage
 
 ``` python
-from SparseLinearRegressor import *
+from SLR import *
 
-smlr = SparseLinearRegressor.sparse_linear_regressor(n_iter=100)
-smlr.fit(X,y)
-smlr.predict(X_test)
+slr = SparseLinearRegressor(n_iter=100)
+slr.fit(X,y)
+slr.predict(X_test)
 ```
 
 - `X`, `X_text`: numpy array of input features (# of samples x # of features)
