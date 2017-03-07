@@ -13,47 +13,47 @@ class SparseLinearRegressor(BaseEstimator, ClassifierMixin):
     Sparse Linear Regressor (SLiR)
 
     Parameters
-    -----------
+    ----------
     n_iter: int, optional
-        Maximum number of iterations. Default is 200
+        Maximum number of iterations (default: 200)
 
     minval: float, optional
-        各所で使いまわす最低値の閾値
+        Threshold for minimum value
 
     prune_mode: int, optional
-        次元削減の手法
-            0: 削減しない
-            1: A,lambda_(weightの推定精度)に基づく刈り込み  <- 精度が良く，実行が遅い，このアルゴリズムの正道
-            2: weightに基づく刈り込み  <- 精度はまあまあ，実行が速い，実際的な実装
+        Dimension reduction method
+        0: do not reduce dimension
+        1: reduce dimension based on A and lambda (slow but accurate)
+        2: reduce dimension based on weights (fast but inaccurate)
 
     prune_threshold: float, optional
-        次元削減の閾値
+        Threshold for dimension reduction
 
     converge_min_iter: int, optional
-        収束判定を開始するiteration数
+        Num of iteration to initiate convergence test
 
     converge_threshold: float, optional
-        収束判定の閾値
+        Threshold of convergence test
 
     verbose: boolean, optional, default False
         Verbose mode when fitting the model.
 
     verbose_skip: int, optional
-        iteration中のprint間隔
+        Interval of verbose outputs during iteration
 
     Attributes
-    -----------
+    ----------
     coef_: array, shape = (n_features)
-        Coefficients of the regression model (mean of distribution)
-        回帰モデルの偏回帰係数
+        Coefficients of the regression model (mean of distribution).
+        This corresponds to `W` of ARDRegression in scikit-learn.
 
     alpha_ : float
-        estimated precision of the noise.
-        ノイズの推定精度
+        Estimated precision of the noise.
+        This corresponds to `SY` of ARDRegression in scikit-learn.
 
     lambda_ : float, shape = (n_features)
-        estimated precision of the weights.
-        回帰係数の推定精度
+        Estimated precision of the weights.
+        This corresponds to `A` of ARDRegression in scikit-learn.
 
     Examples
     --------
@@ -66,16 +66,10 @@ class SparseLinearRegressor(BaseEstimator, ClassifierMixin):
                  verbose=False, verbose_skip = 10)
     >>> clf.predict([[1, 1]])
 
-    注意事項
-    --------
-    ※ sklearnのARDRegression中の変数との対応は凡そ以下の通り（アルゴリズムが違うので厳密に同一ではない）
-        coef_: Wが対応
-        lambda_: Aが対応
-        alpha_: SYが対応
-    ※ sklearnのARD regressionにはcompute_scoreがあって，iterationごとに収束度合いのスコアを計算できる
-        が，逆行列計算が増えたりするので，却下．計算しない．
-        故にAttributesにscore_がいない
-    ※ copy_Xは勝手にやります
+    Notes
+    -----
+
+    `compute_score` is omitted to reduce computation time.
     """
 
     def __init__(self, n_iter=200, minval=1.0e-15,

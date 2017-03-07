@@ -1,4 +1,3 @@
-# coding: utf-8
 '''
 Demo script for slir
 '''
@@ -33,8 +32,7 @@ def main():
     diabetes_y_train = diabetes.target[:-20]
     diabetes_y_test = diabetes.target[-20:]
 
-    # Generate a sparse data
-    # 次元方向にコピーを繰り返して，サンプル数よりも大きくなるようにする
+    # Make the input data sparse
     diabetes_x_train = np.hstack([diabetes_x_train for _ in range(43)])
     diabetes_x_test = np.hstack([diabetes_x_test for _ in range(43)])
 
