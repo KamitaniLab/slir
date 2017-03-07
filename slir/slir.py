@@ -45,15 +45,12 @@ class SparseLinearRegressor(BaseEstimator, ClassifierMixin):
     ----------
     coef_: array, shape = (n_features)
         Coefficients of the regression model (mean of distribution).
-        This corresponds to `W` of ARDRegression in scikit-learn.
 
     alpha_ : float
         Estimated precision of the noise.
-        This corresponds to `SY` of ARDRegression in scikit-learn.
 
     lambda_ : float, shape = (n_features)
         Estimated precision of the weights.
-        This corresponds to `A` of ARDRegression in scikit-learn.
 
     Examples
     --------
@@ -268,9 +265,9 @@ class SparseLinearRegressor(BaseEstimator, ClassifierMixin):
                 # Store A as A_old
                 A_old = A[:, :]
 
-        self.A = A  # alpha
-        self.W = W  # weight
-        self.SY = SY  # SY
+        self.__A = A  # alpha
+        self.__W = W  # weight
+        self.__SY = SY  # SY
         self.activate_index = activate_index_orignal  # final active index list
         self.train_label_average = train_label_average  # average values of label
 
@@ -279,9 +276,9 @@ class SparseLinearRegressor(BaseEstimator, ClassifierMixin):
         self.coef_ = np.zeros(dim_num_org)
         self.lambda_ = np.zeros(dim_num_org)
         # The coefficient of regression model
-        self.coef_[activate_index_orignal] = self.W
+        self.coef_[activate_index_orignal] = self.__W
         # The estimated precisions of weights(coefficient)
-        self.lambda_[activate_index_orignal] = self.A
+        self.lambda_[activate_index_orignal] = self.__A
         self.alpha = SY  # The estimated precision of noise
 
         return self
@@ -304,7 +301,7 @@ class SparseLinearRegressor(BaseEstimator, ClassifierMixin):
         X = X[self.activate_index, :]
 
         # Predict by inner-producting and adding average of label
-        C = np.dot(self.W, X)
+        C = np.dot(self.__W, X)
         C = C.transpose() + self.train_label_average
 
         C = C.flatten()
