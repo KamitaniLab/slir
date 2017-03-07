@@ -54,13 +54,12 @@ class SparseLinearRegressor(BaseEstimator, ClassifierMixin):
 
     Examples
     --------
-    >>> from sparse_linear_regressor import sparseLinearRegressor
-    >>> clf = sparseLinearRegressor()
-    >>> clf.fit([[0,0], [1, 1], [2, 2]], [0, 1, 2])
-    >>> sparseLinearRegressor(n_iter=200, minval = 1.0e-15,
+    >>> import slir
+    >>> clf = slir.SparseLinearRegressor(n_iter=200, minval = 1.0e-15,
                  prune_mode = 1, prune_threshold = 1.0e-10,
                  converge_min_iter = 100, converge_threshold = 1.0e-10,
                  verbose=False, verbose_skip = 10)
+    >>> clf.fit([[0,0], [1, 1], [2, 2]], [0, 1, 2])
     >>> clf.predict([[1, 1]])
 
     Notes
