@@ -1,12 +1,25 @@
-# SLiR: Sparse Linear Regressor
+# SLiR: Sparse Linear Regression
 
-Sparse linear regressor (SLiR), writen by Misato Tanaka at ATR.
-The API of this function is compatible with the regressor in scikit-learn.
+Sparse linear regression (SLiR), writen by Misato Tanaka at ATR.
+The API of this function is compatible with the regression in scikit-learn.
 
 Sparse regularization by automatic relevance determination (ARD) prior was introduced to the linear regression algorithm (Yamashita et al., 2008).
 This regularization process estimates the importance of each voxel (feature) and prunes away voxels that are not useful for prediction.
 
 Original SLR toolbox for Matlab is available at <http://www.cns.atr.jp/%7Eoyamashi/SLR_WEB.html>.
+
+## Installation
+
+### 1. Install required packages
+
+- numpy
+- scikit-learn
+
+### 2. Run the setup script
+
+```shell
+$ python setup.py install
+```
 
 ## Usage
 
