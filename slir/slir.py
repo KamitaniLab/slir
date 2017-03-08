@@ -8,9 +8,9 @@ import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin
 
 
-class SparseLinearRegressor(BaseEstimator, ClassifierMixin):
+class SparseLinearRegression(BaseEstimator, ClassifierMixin):
     """
-    Sparse Linear Regressor (SLiR)
+    Sparse Linear Regression (SLiR)
 
     Parameters
     ----------
