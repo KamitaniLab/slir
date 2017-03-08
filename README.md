@@ -1,6 +1,6 @@
 # SLiR: Sparse Linear Regression
 
-Sparse linear regression (SLiR), writen by Misato Tanaka at ATR.
+Sparse linear regression (SLiR), developed by Misato Tanaka at ATR.
 The API of this function is compatible with the regression in scikit-learn.
 
 Sparse regularization by automatic relevance determination (ARD) prior was introduced to the linear regression algorithm (Yamashita et al., 2008).
