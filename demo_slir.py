@@ -40,7 +40,7 @@ def main():
 
     # Create linear regression object
     start_time = time.time()
-    clf = slir.SparseLinearRegressor(n_iter=200, verbose=True)
+    clf = slir.SparseLinearRegression(n_iter=200, verbose=True)
 
     # Fit
     clf.fit(diabetes_x_train, diabetes_y_train)
