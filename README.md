@@ -26,7 +26,7 @@ $ python setup.py install
 ``` python
 import slir
 
-slr = slir.SparseLinearRegressor(n_iter=100)
+slr = slir.SparseLinearRegression(n_iter=100)
 slr.fit(x, y)
 slr.predict(x_test)
 ```
