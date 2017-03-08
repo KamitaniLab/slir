@@ -1,2 +1,9 @@
+.DS_Store
+*~
+
 *.pyc
+.python-version
 .pylintrc
+build
+dist
+*.egg-info
