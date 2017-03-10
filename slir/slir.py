@@ -263,6 +263,9 @@ class SparseLinearRegression(BaseEstimator, ClassifierMixin):
 
                 # Store A as A_old
                 A_old = A[:, :]
+                
+            else:
+                A = np.maximum(A, self.minval)
 
         self.__A = A  # alpha
         self.__W = W  # weight
