@@ -78,7 +78,7 @@ class SparseLinearRegression(BaseEstimator, ClassifierMixin):
         self.prune_threshold = prune_threshold
         self.converge_min_iter = converge_min_iter
         self.converge_threshold = converge_threshold
-        self.verbose = verbose
+        self.verbose = verbose 
         self.verbose_skip = verbose_skip
 
         print "SLiR (sparse linear regression)"
@@ -126,65 +126,59 @@ class SparseLinearRegression(BaseEstimator, ClassifierMixin):
         ####################
         # Initialization
         ####################
-        # データ・ラベルともにサンプル間平均を算出
-        # 次元ごとに，ラベル種別ごとに分散をもとめて，平均する
-        train_data_average = np.average(X, axis=1).reshape((dim_num, 1))
-        train_label_average = np.average(Y, axis=1)  # あとでpredictのときに使う <k types>
-        X2 = X - train_data_average
-        Y2 = Y - train_label_average.reshape((label_type_num, 1))
+        # center data and label
+        self.train_data_average = np.average(X, axis=1).reshape((dim_num, 1))
+        self.train_label_average = np.average(Y, axis=1)  
+        X2 = X - self.train_data_average
+        Y2 = Y - self.train_label_average.reshape((label_type_num, 1))
         X_var = np.mean(X2 ** 2, axis=1)
         Y_var = np.mean(Y2 ** 2, axis=1)
+        
+        # initialize alpha prior, weight, and noise variance
         alpha_0 = 1.0 / np.mean(X_var)
         SY0 = np.mean(Y_var)
-
-        # initialize alpha prior and weight
         if alpha_0 < self.minval:
             A = self.minval * np.ones((1, dim_num))
         else:
             A = alpha_0 * np.ones((1, dim_num))
         W = np.zeros((label_type_num, dim_num))
-        SY = SY0  # scalar
+        SY = SY0  
 
-        # ラベルとデータの共分散行列の生成（normalizeはしない方針らしい）
+        # prepare covariance of data and label
         YX = np.dot(Y, X.transpose())
         YY = np.sum(Y ** 2, axis=1)
         sumYY = np.sum(YY)  # scalar
-
-        # active index list
-        activate_index_orignal = np.arange(dim_num)
-
-        # 比較用変数
-        A_old = A[:, :]  # <1 * n samples>
-        dim_num_old = dim_num
-        # Xの共分散を計算
+        
+        # prepare covariance of X
         if sample_num < dim_num:
             XX = None
         else:
             XX = np.dot(X, X.transpose())
 
+        # Not pruned index list
+        self.valid_index_list = np.arange(dim_num)
+
+        # prepare temporary variables
+        A_old = A[:, :]  
+        dim_num_old = dim_num
+
         ####################
         # Iterative procedure of ARDRegression
         ####################
         for i in range(self.n_iter):
-
             if sample_num < dim_num:
-                # 各行ごとにAを要素掛算
                 XA = X.transpose() * A[0]
-                # Aを要素掛け算したXを，さらにXと内積し，単位行列を加える
-                # eyeは単位行列を作成する処理
                 CC = np.dot(XA, X) + np.eye(sample_num)
-                # X/CCは<n*n>による割り算なので，CCをinvする
                 XC = np.dot(X, np.linalg.pinv(CC))
 
                 # Update weight
-                # ラベルとデータの共分散行列に，行ごとのAの要素掛算をする
                 W = YX * A[0]
                 W = W - np.dot(np.dot(W, XC), XA)
 
                 # Update gain
                 G_A = A[0] * np.sum(X * XC, axis=1)
             else:
-                # 次元削減効果により，途中からこっちの分岐に入ることもある
+                # In the middle of iteration, this branch may be runned by the dimension reduction
                 if XX is None:
                     XX = np.dot(X, X.transpose())
 
@@ -196,13 +190,13 @@ class SparseLinearRegression(BaseEstimator, ClassifierMixin):
                 # Update gain
                 G_A = np.diag(np.dot(XX, inv_SW)).transpose()
 
-            # weightの次元ごとの分散
+            # The sum of weight variance 
             WW = np.sum(W ** 2, axis=0)
 
             # Update noise variance
             SY = (sumYY - np.sum(W * YX)) / (label_type_num * sample_num)
 
-            # SYが極めて小さい場合の対応
+            # If noise variance is too small 
             if SY / SY0 < self.minval:
                 dY = Y - np.dot(W, X)
                 dYY = np.sum(dY ** 2, axis=1)
@@ -241,20 +235,23 @@ class SparseLinearRegression(BaseEstimator, ClassifierMixin):
                     W = W[:, activate_index]
                     X = X[activate_index, :]
                     YX = YX[:, activate_index]
-                    if XX is not None:  # sparse typeのときは更新不要
+                    if XX is not None:  # sparce case: sample_num < dim_num
                         XX = XX[np.ix_(activate_index, activate_index)]
 
-                    # Update active index list
-                    activate_index_orignal = activate_index_orignal[activate_index]
+                    # Update valid index list
+                    self.valid_index_list = self.valid_index_list[activate_index]
+                    
+                if len(self.valid_index_list) == 0: # Error
+                    print "All dimensions are pruned."
+                    quit()
 
-                if self.verbose:
-                    if (i + 1) % self.verbose_skip == 0:
-                        err = SY / SY0
-                        print "Iter:%d, DimNum:%d, Error:%f" % (i + 1, dim_num, err)
+                if self.verbose and (i + 1) % self.verbose_skip == 0:
+                    err = SY / SY0
+                    print "Iter:%d, DimNum:%d, Error:%f" % (i + 1, dim_num, err)
 
                 # Check for convergence
                 if (i > self.converge_min_iter) & (dim_num == dim_num_old):
-                    # Aの最大の変化量が，閾値を下回るときはbreakする
+                    # Stop the iteration based on a max value of A diff
                     Adif = np.max(np.abs(A - A_old))
                     if Adif < self.converge_threshold:
                         if self.verbose:
@@ -264,24 +261,22 @@ class SparseLinearRegression(BaseEstimator, ClassifierMixin):
                 # Store A as A_old
                 A_old = A[:, :]
                 
+            # Not pruning dimensions
             else:
                 A = np.maximum(A, self.minval)
 
         self.__A = A  # alpha
         self.__W = W  # weight
         self.__SY = SY  # SY
-        self.activate_index = activate_index_orignal  # final active index list
-        self.train_data_average = train_data_average  # average of data
-        self.train_label_average = train_label_average  # average values of label
 
         # Copy sklearn's coef_, lambda_ and alpha_
         # Set 0 the pruned dimensions
         self.coef_ = np.zeros(dim_num_org)
         self.lambda_ = np.zeros(dim_num_org)
         # The coefficient of regression model
-        self.coef_[activate_index_orignal] = self.__W
+        self.coef_[self.valid_index_list] = self.__W
         # The estimated precisions of weights(coefficient)
-        self.lambda_[activate_index_orignal] = self.__A
+        self.lambda_[self.valid_index_list] = self.__A
         self.alpha = SY  # The estimated precision of noise
 
         return self
@@ -301,7 +296,7 @@ class SparseLinearRegression(BaseEstimator, ClassifierMixin):
         """
         # Transpose and reduce X
         X = X.transpose() - self.train_data_average
-        X = X[self.activate_index, :]
+        X = X[self.valid_index_list, :]
 
         # Predict by inner-producting and adding average of label
         C = np.dot(self.__W, X)
