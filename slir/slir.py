@@ -128,9 +128,9 @@ class SparseLinearRegression(BaseEstimator, ClassifierMixin):
         ####################
         # データ・ラベルともにサンプル間平均を算出
         # 次元ごとに，ラベル種別ごとに分散をもとめて，平均する
-        train_label_average = np.average(
-            Y, axis=1)  # あとでpredictのときに使う <k types>
-        X2 = X - np.average(X, axis=1).reshape((dim_num, 1))
+        train_data_average = np.average(X, axis=1).reshape((dim_num, 1))
+        train_label_average = np.average(Y, axis=1)  # あとでpredictのときに使う <k types>
+        X2 = X - train_data_average
         Y2 = Y - train_label_average.reshape((label_type_num, 1))
         X_var = np.mean(X2 ** 2, axis=1)
         Y_var = np.mean(Y2 ** 2, axis=1)
@@ -271,6 +271,7 @@ class SparseLinearRegression(BaseEstimator, ClassifierMixin):
         self.__W = W  # weight
         self.__SY = SY  # SY
         self.activate_index = activate_index_orignal  # final active index list
+        self.train_data_average = train_data_average  # average of data
         self.train_label_average = train_label_average  # average values of label
 
         # Copy sklearn's coef_, lambda_ and alpha_
@@ -299,7 +300,7 @@ class SparseLinearRegression(BaseEstimator, ClassifierMixin):
             Returns predicted values.
         """
         # Transpose and reduce X
-        X = X.transpose()
+        X = X.transpose() - self.train_data_average
         X = X[self.activate_index, :]
 
         # Predict by inner-producting and adding average of label
