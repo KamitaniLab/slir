@@ -11,6 +11,7 @@ import numpy as np
 from sklearn import datasets
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import ARDRegression
+from sklearn.datasets.samples_generator import make_regression
 
 import slir
 
@@ -20,25 +21,35 @@ def main():
     Demo for slir
     '''
 
-    # Load the diabetes dataset
-    diabetes = datasets.load_diabetes()
-
-    # Use only one feature
-    diabetes_x = diabetes.data
-
-    # Split the data into training/testing sets
-    train_x = diabetes_x[:-20]
-    test_x = diabetes_x[-20:]
-
-    # Split the targets into training/testing sets
-    train_y = diabetes.target[:-20]
-    test_y = diabetes.target[-20:]
-
-    # Make the input data sparse
-    #train_x = np.hstack([train_x for _ in range(100)]) # 43
-    #test_x = np.hstack([test_x for _ in range(100)])
-    train_x = np.hstack([train_x, 0.01 * np.random.randn(422, 500)])
-    test_x = np.hstack([test_x, 0.01 * np.random.randn(20, 500)])
+    # Make the dataset
+    data_x, data_y = make_regression(n_samples=1000, n_features=500, 
+                                     random_state=0, noise=5.0,
+                                     bias=2.0, effective_rank=50)
+    train_x, train_y = data_x[:800], data_y[:800]
+    test_x, test_y = data_x[800:], data_y[800:]
+    
+    
+    # Preprocessing ########################
+    # Please normalize and add bias term
+    # Slir needs these preprocessing for better performance
+    ########################################
+    # Normalize
+    train_x_mean = np.mean(train_x)
+    train_x_std  = np.std(train_x)
+    train_y_mean = np.mean(train_y)
+    train_y_std  = np.std(train_y)
+    train_x -= train_x_mean
+    train_x /= train_x_std
+    test_x  -= train_x_mean
+    test_x  /= train_x_std
+    train_y -= train_y_mean
+    train_y /= train_y_std
+    test_y  -= train_y_mean
+    test_y  /= train_y_std
+    # Add bias
+    train_x = np.hstack([train_x, np.ones(train_x.shape[0])[:, np.newaxis]])
+    test_x = np.hstack([test_x, np.ones(test_x.shape[0])[:, np.newaxis]])
+    #########################################
     
     # Num of iteration
     num_itr = 200
@@ -60,7 +71,14 @@ def main():
         print("Time:\t%.4f" % (time.time() - start_time))
 
         predict[k] = models[k].predict(test_x)
-
+        
+        # Postprocessing ########################
+        # Please invert predicted result
+        ########################################
+        predict[k] *= train_y_std
+        predict[k] += train_y_mean
+        #########################################
+        
         # Correlation and mean squared error (MSE)
         print("Corr:\t%.4f" % np.corrcoef(predict[k], test_y)[0, 1])
         print("MSE:\t%.4f" % np.mean((predict[k] - test_y) ** 2))

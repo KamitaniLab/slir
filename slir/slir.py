@@ -126,13 +126,8 @@ class SparseLinearRegression(BaseEstimator, ClassifierMixin):
         ####################
         # Initialization
         ####################
-        # center data and label
-        self.train_data_average = np.average(X, axis=1).reshape((dim_num, 1))
-        self.train_label_average = np.average(Y, axis=1)  
-        X2 = X - self.train_data_average
-        Y2 = Y - self.train_label_average.reshape((label_type_num, 1))
-        X_var = np.mean(X2 ** 2, axis=1)
-        Y_var = np.mean(Y2 ** 2, axis=1)
+        X_var = np.mean(X ** 2, axis=1)
+        Y_var = np.mean(Y ** 2, axis=1)
         
         # initialize alpha prior, weight, and noise variance
         alpha_0 = 1.0 / np.mean(X_var)
@@ -295,13 +290,10 @@ class SparseLinearRegression(BaseEstimator, ClassifierMixin):
             Returns predicted values.
         """
         # Transpose and reduce X
-        X = X.transpose() - self.train_data_average
-        X = X[self.valid_index_list, :]
+        X = X.transpose()[self.valid_index_list, :]
 
         # Predict by inner-producting and adding average of label
         C = np.dot(self.__W, X)
-        C = C.transpose() + self.train_label_average
-
-        C = C.flatten()
+        C = C.transpose().flatten()
 
         return C
