@@ -81,7 +81,9 @@ class SparseLinearRegression(BaseEstimator, ClassifierMixin):
         self.verbose = verbose 
         self.verbose_skip = verbose_skip
 
-        print "SLiR (sparse linear regression)"
+        if verbose:
+            print "SLiR (Sparse Linear Regression)"
+
 
     def fit(self, X, y):
         """
