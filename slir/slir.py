@@ -5,10 +5,10 @@ SLiR (Sparse Linear Regression)
 
 
 import numpy as np
-from sklearn.base import BaseEstimator, ClassifierMixin
+from sklearn.base import BaseEstimator, RegressorMixin
 
 
-class SparseLinearRegression(BaseEstimator, ClassifierMixin):
+class SparseLinearRegression(BaseEstimator, RegressorMixin):
     """
     Sparse Linear Regression (SLiR)
 
