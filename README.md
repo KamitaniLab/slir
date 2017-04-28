@@ -6,7 +6,7 @@ The API of this function is compatible with the regression in scikit-learn.
 Sparse regularization by automatic relevance determination (ARD) prior was introduced to the linear regression algorithm (Yamashita et al., 2008).
 This regularization process estimates the importance of each voxel (feature) and prunes away voxels that are not useful for prediction.
 
-Original SLR toolbox for Matlab is available at <http://www.cns.atr.jp/%7Eoyamashi/SLR_WEB.html>.
+Original Sparse Linear Regerssion toolbox for Matlab is available at <http://www.cns.atr.jp/cbi/sparse_estimation/sato/VBSR.html>
 
 ## Installation
 
@@ -50,7 +50,7 @@ For demonstration, try `demo_slir.py`.
 
 ## References
 
-Yamashita O, Sato MA, Yoshioka T, Tong F, Kamitani Y. (2008) Sparse estimation automatically selects voxels relevant for the decoding of fMRI activity patterns. NeuroImage. doi: 10.1016/j.neuroimage.2008.05.050. <http://www.sciencedirect.com/science/article/pii/S1053811908006940>
+Sato M., (2001). On-line model selection based on the variational Bayes. Neural Computation, 13, 1649-1681. <http://www.mitpressjournals.org/doi/abs/10.1162/089976601750265045#.WQLdG8mkIUF>
 
 ## License
 
