@@ -6,19 +6,14 @@ The API of this function is compatible with the regression in scikit-learn.
 Sparse regularization by automatic relevance determination (ARD) prior was introduced to the linear regression algorithm (Yamashita et al., 2008).
 This regularization process estimates the importance of each voxel (feature) and prunes away voxels that are not useful for prediction.
 
-Original Sparse Linear Regerssion toolbox for Matlab is available at <http://www.cns.atr.jp/cbi/sparse_estimation/sato/VBSR.html>
+Original Sparse Linear Regerssion toolbox for Matlab is available at <http://www.cns.atr.jp/cbi/sparse_estimation/sato/VBSR.html>.
 
 ## Installation
 
-### 1. Install required packages
+Run the following command:
 
-- numpy
-- scikit-learn
-
-### 2. Run the setup script
-
-```shell
-$ python setup.py install
+``` shell
+$ pip install git+https://github.com/KamitaniLab/slir.git
 ```
 
 ## Usage
@@ -50,7 +45,7 @@ For demonstration, try `demo_slir.py`.
 
 ## References
 
-Sato M., (2001). On-line model selection based on the variational Bayes. Neural Computation, 13, 1649-1681. <http://www.mitpressjournals.org/doi/abs/10.1162/089976601750265045#.WQLdG8mkIUF>
+Sato M. (2001) On-line model selection based on the variational Bayes. Neural Computation, 13, 1649-1681. <http://www.mitpressjournals.org/doi/abs/10.1162/089976601750265045#.WQLdG8mkIUF>
 
 ## License
 
