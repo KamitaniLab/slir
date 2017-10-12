@@ -110,11 +110,9 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
         sample_num = X.shape[0]
         dim_num = X.shape[1]
         label_type_num = y.shape[1]
-        if X.shape[0] != y.shape[0]:  # Error
-            print "The number of samples are unmatched."
-            print "Train X shape:", X.shape
-            print "Train y shape:", y.shape
-            quit()
+        if X.shape[0] != y.shape[0]:
+            raise ValueError('The number of samples are unmatched between x (%d) and y (%d).' % (X.shape[0], y.shape[0]))
+
         dim_num_org = dim_num
 
         # Transpose
