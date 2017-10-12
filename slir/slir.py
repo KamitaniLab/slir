@@ -239,8 +239,7 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
                     self.valid_index_list = self.valid_index_list[activate_index]
                     
                 if len(self.valid_index_list) == 0: # Error
-                    print "All dimensions are pruned."
-                    quit()
+                    raise RuntimeError('All dimensions are pruned.')
 
                 if self.verbose and (i + 1) % self.verbose_skip == 0:
                     err = SY / SY0
