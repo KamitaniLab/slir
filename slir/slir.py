@@ -82,7 +82,7 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
         self.verbose_skip = verbose_skip
 
         if verbose:
-            print "SLiR (Sparse Linear Regression)"
+            print("SLiR (Sparse Linear Regression)")
 
 
     def fit(self, X, y):
@@ -121,7 +121,7 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
         del y
 
         if self.verbose:
-            print "InputDim:%d/OutputLabels:%d/TrainNum:%d" % (dim_num, label_type_num, sample_num)
+            print("InputDim:%d/OutputLabels:%d/TrainNum:%d" % (dim_num, label_type_num, sample_num))
 
         ####################
         # Initialization
@@ -198,7 +198,7 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
                 SY = (np.sum(dYY) + np.sum(WW / A)) / \
                     (label_type_num * sample_num)
                 SY = np.max([SY, self.minval])
-                print "*"
+                print("*")
 
             # Check Gain value
             G_A = np.maximum(G_A, self.minval)
@@ -206,8 +206,8 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
             # Update alpha
             try:
                 A = np.sqrt(A * (WW / SY) / (G_A * label_type_num))
-            except Exception, _:
-                print "Update error @ alpha"
+            except:
+                print("Update error @ alpha")
 
             # Pruning dimensions
             if self.prune_mode > 0:
@@ -241,7 +241,7 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
 
                 if self.verbose and (i + 1) % self.verbose_skip == 0:
                     err = SY / SY0
-                    print "Iter:%d, DimNum:%d, Error:%f" % (i + 1, dim_num, err)
+                    print("Iter:%d, DimNum:%d, Error:%f" % (i + 1, dim_num, err))
 
                 # Check for convergence
                 if (i > self.converge_min_iter) & (dim_num == dim_num_old):
@@ -249,7 +249,7 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
                     Adif = np.max(np.abs(A - A_old))
                     if Adif < self.converge_threshold:
                         if self.verbose:
-                            print "End. -- Iter:%d, DimNum:%d, Error:%f, AlphaConverged:%f" % (i, dim_num, err, Adif)
+                            print("End. -- Iter:%d, DimNum:%d, Error:%f, AlphaConverged:%f" % (i, dim_num, err, Adif))
                         break
 
                 # Store A as A_old

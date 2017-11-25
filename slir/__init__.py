@@ -1,1 +1,1 @@
-from slir import SparseLinearRegression
+from .slir import SparseLinearRegression
