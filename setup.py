@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='slir',
-      version='0.4',
+      version='0.5',
       description='Python package for Sparse Linear Regression',
       author='Misato Tanaka',
       author_email='kamitanilab.contact@gmail.com',
