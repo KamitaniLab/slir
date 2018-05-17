@@ -21,7 +21,7 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
         Threshold for minimum value
 
     prune_mode: int, optional
-        Dimension reduction method
+        Dimension reduction method (default: 1)
         0: do not reduce dimension
         1: reduce dimension based on A and lambda (slow but accurate)
         2: reduce dimension based on weights (fast but inaccurate)
@@ -43,24 +43,21 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
 
     Attributes
     ----------
-    coef_: array, shape = (n_features)
+    coef_: array, shape = (n_features,)
         Coefficients of the regression model (mean of distribution).
 
     alpha_ : float
         Estimated precision of the noise.
 
-    lambda_ : float, shape = (n_features)
+    lambda_ : array, shape = (n_features,)
         Estimated precision of the weights.
 
     Examples
     --------
     >>> import slir
-    >>> clf = slir.SparseLinearRegression(n_iter=200, minval = 1.0e-15,
-                 prune_mode = 1, prune_threshold = 1.0e-10,
-                 converge_min_iter = 100, converge_threshold = 1.0e-10,
-                 verbose=False, verbose_skip = 10)
-    >>> clf.fit([[0,0], [1, 1], [2, 2]], [0, 1, 2])
-    >>> clf.predict([[1, 1]])
+    >>> model = slir.SparseLinearRegression()
+    >>> model.fit(x, y)
+    >>> predict = model.predict(x_test)
 
     Notes
     -----
@@ -92,8 +89,8 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
 
         Parameters
         ----------
-        X: array-like, shape = [n_samples, n_features]
-        y: array-like, shape = [n_samples]
+        X: array-like, shape = (n_samples, n_features)
+        y: array-like, shape = (n_samples)
 
         Returns
         -------
@@ -280,7 +277,7 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
 
         Parameters
         ----------
-        X: array-like, shape = [n_samples, n_features]
+        X: array-like, shape = (n_samples, n_features)
 
         Returns
         -------
