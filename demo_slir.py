@@ -29,7 +29,7 @@ def main():
     diabetes_x_test = diabetes_x[-20:]
 
     # Split the targets into training/testing sets
-    diabetes_y_train = diabetes.target[:-10]
+    diabetes_y_train = diabetes.target[:-20]
     diabetes_y_test = diabetes.target[-20:]
 
     #diabetes_y_train = np.zeros(diabetes_y_train.shape)
