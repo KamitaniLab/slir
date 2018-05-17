@@ -26,26 +26,14 @@ slr.fit(x, y)
 slr.predict(x_test)
 ```
 
-- `x`, `x_text`: numpy array of input features (# of samples x # of features)
-- `y`: label vector consisting of float values 
-
-### Parameters
-
-- `n_iter`: The number of iterations in training (default `100`).
-- `verbose`: If 1, print verbose information (default).
-
-### Attributes
-
-- `coef_`: array, shape = [n_classes, n_features]
-    - Coefficient of the features in the decision function.
-- `lambda_`: array, shape = [n_classes]
-    - The estimated precision of the weights.
+- `x`, `x_text`: numpy array of input features
+- `y`: target vector consisting of float values
 
 For demonstration, try `demo_slir.py`.
 
 ## References
 
-Sato M. (2001) On-line model selection based on the variational Bayes. Neural Computation, 13, 1649-1681. <http://www.mitpressjournals.org/doi/abs/10.1162/089976601750265045#.WQLdG8mkIUF>
+Sato M. (2001) On-line model selection based on the variational Bayes. Neural Computation, 13, 1649-1681. <http://www.mitpressjournals.org/doi/abs/10.1162/089976601750265045>
 
 ## License
 
