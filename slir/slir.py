@@ -261,7 +261,6 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
 
         self.__A = A  # alpha
         self.__W = W  # weight
-        self.__SY = SY  # SY
 
         # Copy sklearn's coef_, lambda_ and alpha_
         # Set 0 the pruned dimensions
@@ -271,7 +270,7 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
         self.coef_[self.valid_index_list] = self.__W
         # The estimated precisions of weights(coefficient)
         self.lambda_[self.valid_index_list] = self.__A
-        self.alpha = SY  # The estimated precision of noise
+        self.alpha_ = SY  # The estimated precision of noise
 
         return self
 
