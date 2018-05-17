@@ -29,9 +29,11 @@ def main():
     diabetes_x_test = diabetes_x[-20:]
 
     # Split the targets into training/testing sets
-    diabetes_y_train = diabetes.target[:-20]
+    diabetes_y_train = diabetes.target[:-10]
     diabetes_y_test = diabetes.target[-20:]
 
+    #diabetes_y_train = np.zeros(diabetes_y_train.shape)
+    
     # Make the input data sparse
     diabetes_x_train = np.hstack([diabetes_x_train for _ in range(43)])
     diabetes_x_test = np.hstack([diabetes_x_test for _ in range(43)])

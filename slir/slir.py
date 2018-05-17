@@ -78,7 +78,7 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
         self.prune_threshold = prune_threshold
         self.converge_min_iter = converge_min_iter
         self.converge_threshold = converge_threshold
-        self.verbose = verbose 
+        self.verbose = verbose
         self.verbose_skip = verbose_skip
 
         if verbose:
@@ -128,7 +128,7 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
         ####################
         X_var = np.mean(X ** 2, axis=1)
         Y_var = np.mean(Y ** 2, axis=1)
-        
+
         # initialize alpha prior, weight, and noise variance
         alpha_0 = 1.0 / np.mean(X_var)
         SY0 = np.mean(Y_var)
@@ -137,13 +137,13 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
         else:
             A = alpha_0 * np.ones((1, dim_num))
         W = np.zeros((label_type_num, dim_num))
-        SY = SY0  
+        SY = SY0
 
         # prepare covariance of data and label
         YX = np.dot(Y, X.transpose())
         YY = np.sum(Y ** 2, axis=1)
         sumYY = np.sum(YY)  # scalar
-        
+
         # prepare covariance of X
         if sample_num < dim_num:
             XX = None
@@ -154,7 +154,7 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
         self.valid_index_list = np.arange(dim_num)
 
         # prepare temporary variables
-        A_old = A[:, :]  
+        A_old = A[:, :]
         dim_num_old = dim_num
 
         ####################
@@ -185,13 +185,13 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
                 # Update gain
                 G_A = np.diag(np.dot(XX, inv_SW)).transpose()
 
-            # The sum of weight variance 
+            # The sum of weight variance
             WW = np.sum(W ** 2, axis=0)
 
             # Update noise variance
             SY = (sumYY - np.sum(W * YX)) / (label_type_num * sample_num)
 
-            # If noise variance is too small 
+            # If noise variance is too small
             if SY / SY0 < self.minval:
                 dY = Y - np.dot(W, X)
                 dYY = np.sum(dY ** 2, axis=1)
@@ -235,7 +235,7 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
 
                     # Update valid index list
                     self.valid_index_list = self.valid_index_list[activate_index]
-                    
+
                 if len(self.valid_index_list) == 0: # Error
                     raise RuntimeError('All dimensions are pruned.')
 
@@ -254,7 +254,7 @@ class SparseLinearRegression(BaseEstimator, RegressorMixin):
 
                 # Store A as A_old
                 A_old = A[:, :]
-                
+
             # Not pruning dimensions
             else:
                 A = np.maximum(A, self.minval)
