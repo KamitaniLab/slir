@@ -1,10 +1,6 @@
 # SLiR: Sparse Linear Regression
 
 Sparse linear regression (SLiR), developed by Misato Tanaka at ATR.
-The API of this function is compatible with the regression in scikit-learn.
-
-Sparse regularization by automatic relevance determination (ARD) prior was introduced to the linear regression algorithm (Yamashita et al., 2008).
-This regularization process estimates the importance of each voxel (feature) and prunes away voxels that are not useful for prediction.
 
 Original Sparse Linear Regerssion toolbox for Matlab is available at <http://www.cns.atr.jp/cbi/sparse_estimation/sato/VBSR.html>.
 
@@ -21,14 +17,16 @@ $ pip install git+https://github.com/KamitaniLab/slir.git
 ``` python
 import slir
 
-slr = slir.SparseLinearRegression(n_iter=100)
-slr.fit(x, y)
-slr.predict(x_test)
+model = slir.SparseLinearRegression(n_iter=100)
+
+model.fit(x, y)
+y_pred = model.predict(x_test)
 ```
 
-- `x`, `x_text`: numpy array of input features
-- `y`: target vector consisting of float values
+- `x`, `x_test`: numpy array of training and test input features
+- `y`: target vector
 
+The API of this function is compatible with the regression in scikit-learn.
 For demonstration, try `demo_slir.py`.
 
 ## References
